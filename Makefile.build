@@ -1,0 +1,38 @@
+PHONY := __build
+__build:
+obj-y :=
+
+include Makefile
+include $(TOPDIR)/Makefile.param
+
+OBJ=$(shell pwd)/obj
+
+SRC_DIR = $(shell pwd)
+__subdir-y	:= $(patsubst %/,%,$(filter %/, $(obj-y)))
+subdir-y	+= $(__subdir-y)
+subdir_objs := $(foreach f,$(subdir-y),$(f)/build-in.o)
+cur_objs := $(filter-out %/, $(obj-y))
+ # $(warning "$(cur_objs)")
+dep_files := $(foreach f,$(cur_objs),.$(f).d)
+dep_files := $(wildcard $(dep_files))
+
+
+ifneq ($(dep_files),)
+  include $(dep_files)
+endif
+
+
+
+PHONY += $(subdir-y)
+__build : $(subdir-y) build-in.o
+
+
+$(subdir-y):
+	make -C $@ -f $(TOPDIR)/Makefile.build
+build-in.o : $(cur_objs) $(subdir_objs)
+	$(LD) -r -o $@ $^
+
+dep_file = .$@.d
+%.o : %.c
+	$(CC) $(CFLAGS) -Wp,-MMD,$(dep_file) -c -o $@ $<
+.PHONY : $(PHONY)

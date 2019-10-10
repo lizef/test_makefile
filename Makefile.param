@@ -1,0 +1,21 @@
+#SDK_PATH := /home/ruiva/Work/HiSi/3531D/Hi3531DV100_SDK_V1.0.4.0/mpp
+# SDK_PATH := /home/lzf/hisi/Hi3531DV100_SDK_V1.0.4.0/mpp
+# PRO_PATH := $(shell pwd)
+
+CROSS_COMPILE :=arm-hisiv500-linux-
+
+AS		:= $(CROSS_COMPILE)as
+LD		:= $(CROSS_COMPILE)ld
+CC		:= $(CROSS_COMPILE)gcc
+CXX		:= $(CROSS_COMPILE)g++
+CPP		:= $(CXX) -E
+AR		:= $(CROSS_COMPILE)ar
+NM		:= $(CROSS_COMPILE)nm
+RANLIB	:= $(CROSS_COMPILE)ranlib 
+
+STRIP	:= $(CROSS_COMPILE)strip
+OBJCOPY	:= $(CROSS_COMPILE)objcopy
+OBJDUMP	:= $(CROSS_COMPILE)objdump
+
+export AS LD CC CXX CPP AR NM
+export STRIP OBJCOPY OBJDUMP
